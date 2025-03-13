@@ -5,7 +5,7 @@
     "amount": "20.00",
     "message": "Donate để ủng hộ, cố lên!",
     "imageUrl": "aoe.png",
-    "totalAmount": 42360,
+    "totalAmount": 64360,
     "id": 1741753741057,
     "timestamp": "2025-03-12T04:29:01.057Z"
   },
@@ -15,7 +15,7 @@
     "amount": "15.00",
     "message": "Đây là donate thường xuyên của mình",
     "imageUrl": "aoe.png",
-    "totalAmount": 31350,
+    "totalAmount": 47640,
     "id": 1741753735996,
     "timestamp": "2025-03-12T04:28:55.996Z"
   },
@@ -25,7 +25,7 @@
     "amount": "10.00",
     "message": "Chúc bạn stream vui vẻ!",
     "imageUrl": "aoe.png",
-    "totalAmount": 20570,
+    "totalAmount": 32120,
     "id": 1741753746067,
     "timestamp": "2025-03-12T04:29:06.067Z"
   },
@@ -35,7 +35,7 @@
     "amount": "8.00",
     "message": "Mình theo dõi bạn từ lâu rồi, stream hay lắm",
     "imageUrl": "aoe.png",
-    "totalAmount": 16560,
+    "totalAmount": 25752,
     "id": 1741753736048,
     "timestamp": "2025-03-12T04:28:56.048Z"
   },
@@ -45,7 +45,7 @@
     "amount": "5.00",
     "message": "Game hay quá, tiếp tục nhé!",
     "imageUrl": "aoe.png",
-    "totalAmount": 10185,
+    "totalAmount": 15485,
     "id": 1741753761037,
     "timestamp": "2025-03-12T04:29:21.037Z"
   }

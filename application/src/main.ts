@@ -1,21 +1,25 @@
-import { app, BrowserWindow, ipcMain, screen } from 'electron';
+import { ToggleTouchModeDataTransfer } from './apps/shared/context-brige.types';
+import { app, BrowserWindow, ipcMain, protocol } from 'electron';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
+import { fileURLToPath } from 'url';
 
 let mainWindow: BrowserWindow;
 if (started) {
 	app.quit();
 }
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const createWindow = () => {
 	mainWindow = new BrowserWindow({
-		fullscreen: true,
+		fullscreen: false,
+		resizable: true,
 		transparent: true, // Nền trong suốt
 		frame: false, // Không hiển thị viền cửa sổ
 		// skipTaskbar: true, // Không hiển thị trên taskbar
 		// alwaysOnTop: true, // Luôn hiển thị trên cùng
-		// focusable: false, // Không nhận focus từ hệ thống
-		// resizable: false, // Không cho phép resize
+		focusable: true, // Không nhận focus từ hệ thống
 		// show: false, // Không hiển thị ngay khi khởi tạo
 		webPreferences: {
 			/* nodeIntegration: false,
@@ -32,10 +36,10 @@ const createWindow = () => {
 		mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
 	}
 	mainWindow.once('ready-to-show', () => {
+		mainWindow.maximize();
 		mainWindow.show();
 		mainWindow.webContents.openDevTools();
 	});
-
 	/* // Cho phép người dùng click xuyên qua phần trong suốt
 	mainWindow.setIgnoreMouseEvents(true, { forward: true });
 
@@ -52,6 +56,13 @@ const createWindow = () => {
 	mainWindow.on('focus', () => {
 		mainWindow.setIgnoreMouseEvents(true, { forward: true });
 	}); */
+
+	ipcMain.on('ToggleTouchMode', (_, data: ToggleTouchModeDataTransfer) => {
+		console.log(`{} UI emit event with: `, data);
+		if (data.state) {
+		}
+		//  mainWindow.setS()
+	});
 };
 
 app.on('ready', createWindow);

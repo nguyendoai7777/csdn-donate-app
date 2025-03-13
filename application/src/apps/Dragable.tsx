@@ -1,12 +1,14 @@
-import { FC, MouseEvent, useEffect, useRef, useState } from 'react';
+import { FC, MouseEvent, useContext, useEffect, useRef, useState } from 'react';
 import { ReactBaseProps } from './Donation.types';
 import { createPortal } from 'react-dom';
+import { AppContext } from './context/app.context';
 
 export interface DragableOptions extends ReactBaseProps {
 	positionKey: string;
 	top: number;
 	left: number;
 	attachToBody?: boolean;
+	enabled?: boolean;
 }
 const findZIndex = (e?: MouseEvent) => {
 	const current = e?.target as HTMLDivElement;
@@ -24,7 +26,7 @@ const findZIndex = (e?: MouseEvent) => {
 		current: cz,
 	};
 };
-export const Dragable: FC<DragableOptions> = ({ children, positionKey, top = 100, left = 0, attachToBody = true }) => {
+export const Dragable: FC<DragableOptions> = ({ children, positionKey, top = 100, left = 0, attachToBody = true, enabled = true }) => {
 	const [dragging, setDragging] = useState(false);
 	const [position, setPosition] = useState(() => {
 		const savedPosition = localStorage.getItem(positionKey);
@@ -35,7 +37,6 @@ export const Dragable: FC<DragableOptions> = ({ children, positionKey, top = 100
 	const dragOffsetRef = useRef({ x: 0, y: 0 });
 
 	const [layoutOrder, setLayoutOrder] = useState(1000);
-
 	useEffect(() => {
 		if (liveDonateRef.current) {
 			const rect = liveDonateRef.current.getBoundingClientRect();
@@ -149,13 +150,14 @@ export const Dragable: FC<DragableOptions> = ({ children, positionKey, top = 100
 					zIndex: dragging ? 9999 : layoutOrder,
 				}}
 				data-zindex={layoutOrder}
-				className={`Dragable ${dragging ? 'border-opacity-100' : 'border-opacity-75'} select-none`}
+				className={`Dragable ${enabled ? '' : 'disabled'} ${dragging ? 'border-opacity-100' : 'border-opacity-75'} select-none`}
 			>
 				<div
-					className={`dragable-btn border-b border-blue-400 ${dragging ? 'border-opacity-75' : 'border-opacity-25'}`}
+					className={`dragable-btn ${enabled ? '' : 'disabled'} ${dragging ? 'border-opacity-75' : ''}`}
 					onMouseDown={handleMouseDown}
 					style={{ touchAction: 'none', cursor: dragging ? 'grabbing' : 'grab' }}
 				/>
+
 				<div className=' flex gap-3 flex-col'>{children}</div>
 			</div>,
 			document.querySelector('body')
@@ -172,13 +174,14 @@ export const Dragable: FC<DragableOptions> = ({ children, positionKey, top = 100
 				zIndex: dragging ? 9999 : layoutOrder,
 			}}
 			data-zindex={layoutOrder}
-			className={`Dragable ${dragging ? 'border-opacity-100' : 'border-opacity-75'} select-none`}
+			className={`Dragable ${enabled ? '' : 'disabled'} ${dragging ? 'border-opacity-100' : 'border-opacity-75'} select-none`}
 		>
 			<div
-				className={`dragable-btn border-b border-blue-400 ${dragging ? 'border-opacity-75' : 'border-opacity-25'}`}
+				className={`dragable-btn ${enabled ? '' : 'disabled'}  ${dragging ? 'border-opacity-75' : ''}`}
 				onMouseDown={handleMouseDown}
 				style={{ touchAction: 'none', cursor: dragging ? 'grabbing' : 'grab' }}
 			/>
+
 			<div className=' flex gap-3 flex-col'>{children}</div>
 		</div>
 	);

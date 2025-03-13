@@ -1,5 +1,5 @@
 import { FC, useEffect, useRef, useState } from 'react';
-import { Donation } from '../../shared/types';
+import { Donation } from './shared/types';
 import { DonateCard } from './DonateCard';
 import { PDonation } from './Donation.types';
 /* export interface Donation {

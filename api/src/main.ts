@@ -1,10 +1,9 @@
+import fastifyCors from '@fastify/cors';
 import Fastify from 'fastify';
 import { app } from './app/app';
-import fastifyCors from '@fastify/cors';
 import { MOCK_DATA } from './app/mocks/data';
 import { updateTopDonors } from './app/shared/hepler';
 import ws from './app/websocket/ws';
-import { ipn } from './app/routes/ipn';
 
 const host = process.env.HOST ?? 'localhost';
 const port = process.env.PORT ? Number(process.env.PORT) : 3001;

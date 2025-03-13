@@ -1,6 +1,6 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { Donation } from '../../shared/types';
+import { Donation } from './shared/types';
 import { DonateCard } from './DonateCard';
 // PopupWindowPortal.tsx
 
@@ -30,7 +30,6 @@ const PopupWindowPortal: FC<PopupWindowPortalProps> = ({ children, title, width 
 		// Tạo container div trong cửa sổ mới
 		const containerDiv = document.createElement('div');
 		containerDiv.id = 'popup-root';
-
 		// Thêm một số CSS cơ bản cho cửa sổ popup
 		const styleElement = document.createElement('style');
 		styleElement.textContent = /* css */ `
@@ -74,9 +73,12 @@ const PopupWindowPortal: FC<PopupWindowPortalProps> = ({ children, title, width 
 
 		// Thiết lập tiêu đề cho cửa sổ
 		popup.document.title = title;
-
+		const linkRelCss = document.createElement('link');
+		const nativeRelCss = document.head.querySelector('link');
+		linkRelCss.href = './assets/index-_Celctyl.css';
 		// Thêm style và container vào cửa sổ mới
 		popup.document.head.appendChild(styleElement);
+		nativeRelCss && popup.document.head.appendChild(linkRelCss);
 		popup.document.body.appendChild(containerDiv);
 
 		// Lưu tham chiếu tới cửa sổ và container

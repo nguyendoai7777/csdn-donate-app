@@ -16,9 +16,6 @@
 		"isolatedModules": true,
 		"noEmit": true,
 		"jsx": "react-jsx"
-		/* "paths": {
-			"@shared": ["/shared/*"]
-		} */
 	},
-	"include": ["src", "src-backend", "/shared"]
+	"include": ["src", "src-backend", "/shared", "**/*.d.ts"]
 }

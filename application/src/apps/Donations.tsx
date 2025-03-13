@@ -1,11 +1,10 @@
-import { DragEvent, useEffect, useRef, useState } from 'react';
-import { Donation } from '../../shared/types';
+import { useContext, useEffect, useRef, useState } from 'react';
+import { Donation } from './shared/types';
 import { BE_URL, BE_WS_URL } from '../app.const';
 import PopupWindowPortal, { DonationsHistoryList } from './DonationsHistory';
-import { DonationToast } from './DonationToast';
 import { DonationTop } from './DonationTop';
-import { DragableToastZone, RealtimeDonationToaster } from './DragableToastZone';
-import { Dragable } from './Dragable';
+import { RealtimeDonationToaster } from './DragableToastZone';
+import { AppContext } from './context/app.context';
 
 const AnimatedDonationAlerts = () => {
 	const [connected, setConnected] = useState(false);
@@ -70,10 +69,6 @@ const AnimatedDonationAlerts = () => {
 
 	const showDonationAlert = (donation: Donation) => {
 		setLatestDonation(donation);
-	};
-
-	const tada = () => {
-		console.log(`{} send event to main: `);
 	};
 
 	return (

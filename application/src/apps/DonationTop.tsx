@@ -1,6 +1,7 @@
-import { FC } from 'react';
-import { Donation } from '../../shared/types';
+import { FC, useContext } from 'react';
+import { Donation } from './shared/types';
 import { Dragable } from './Dragable';
+import { AppContext } from './context/app.context';
 
 interface BagedStyle {
 	layout: string;
@@ -27,8 +28,9 @@ const styled: Record<number, BagedStyle> = {
 };
 
 export const DonationTop: FC<{ donations: Donation[] }> = ({ donations }) => {
+	const { dragable } = useContext(AppContext);
 	return (
-		<Dragable positionKey={'topDonate'} top={200} left={0}>
+		<Dragable enabled={dragable} positionKey={'topDonate'} top={200} left={0}>
 			<div className='flex gap-x-2'>
 				{donations.map((donation, idx) => {
 					const style = styled[idx + 1];

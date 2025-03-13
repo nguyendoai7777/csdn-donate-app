@@ -1,6 +1,5 @@
 import { FC } from 'react';
-import { Donation } from '../../shared/types';
-
+import { Donation } from './shared/types';
 export const DonateCard: FC<{ donate: Donation; fixed?: boolean }> = ({ donate: d, fixed = true }) => {
 	return (
 		<div className={` z-50 ${fixed ? 'animate-slide-in w-[350px]' : 'w-full'}`} key={d.id}>
@@ -14,7 +13,7 @@ export const DonateCard: FC<{ donate: Donation; fixed?: boolean }> = ({ donate: 
 				<div className='px-4 py-2 bg-indigo-900 bg-opacity-85'>
 					<div className='flex items-center'>
 						<div className='w-12 h-12 rounded-full overflow-hidden mr-3 bg-purple-800 flex-shrink-0'>
-							<img src={`../../shared/images/${d.imageUrl}`} alt={d.name} className='w-full h-full object-cover' />
+							<img src={`images/${d.imageUrl}`} alt={d.name} className='w-full h-full object-cover' />
 						</div>
 						<div>
 							<p className='text-white'>{d.message}</p>
