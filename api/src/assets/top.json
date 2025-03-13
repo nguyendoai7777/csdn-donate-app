@@ -1,0 +1,52 @@
+[
+  {
+    "uuid": "6eed3cfb-01a0-48a6-837e-dfc19c8d6463",
+    "name": "FanCuongNhiet",
+    "amount": "20.00",
+    "message": "Donate để ủng hộ, cố lên!",
+    "imageUrl": "aoe.png",
+    "totalAmount": 42360,
+    "id": 1741753741057,
+    "timestamp": "2025-03-12T04:29:01.057Z"
+  },
+  {
+    "uuid": "8dc2adda-3ddf-4dae-a2b3-ce2cefe50664",
+    "name": "KhachQuen",
+    "amount": "15.00",
+    "message": "Đây là donate thường xuyên của mình",
+    "imageUrl": "aoe.png",
+    "totalAmount": 31350,
+    "id": 1741753735996,
+    "timestamp": "2025-03-12T04:28:55.996Z"
+  },
+  {
+    "uuid": "a9ad818f-532c-49f0-ba6b-a32bc4fedaf5",
+    "name": "NguoiHaoTam1",
+    "amount": "10.00",
+    "message": "Chúc bạn stream vui vẻ!",
+    "imageUrl": "aoe.png",
+    "totalAmount": 20570,
+    "id": 1741753746067,
+    "timestamp": "2025-03-12T04:29:06.067Z"
+  },
+  {
+    "uuid": "edd0d7fb-668d-4db0-a197-00c2f714ffcc",
+    "name": "ViewerTrungThanh",
+    "amount": "8.00",
+    "message": "Mình theo dõi bạn từ lâu rồi, stream hay lắm",
+    "imageUrl": "aoe.png",
+    "totalAmount": 16560,
+    "id": 1741753736048,
+    "timestamp": "2025-03-12T04:28:56.048Z"
+  },
+  {
+    "uuid": "556cf5d8-577a-47f1-aff8-e7be28014a97",
+    "name": "GameLover123",
+    "amount": "5.00",
+    "message": "Game hay quá, tiếp tục nhé!",
+    "imageUrl": "aoe.png",
+    "totalAmount": 10185,
+    "id": 1741753761037,
+    "timestamp": "2025-03-12T04:29:21.037Z"
+  }
+]
