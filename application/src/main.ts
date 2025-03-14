@@ -1,3 +1,4 @@
+import { ToggleTouchMode } from './../app.events';
 import { ToggleTouchModeDataTransfer } from './apps/shared/context-brige.types';
 import { app, BrowserWindow, ipcMain } from 'electron';
 import path from 'node:path';
@@ -55,7 +56,7 @@ const createWindow = () => {
 		mainWindow.setIgnoreMouseEvents(true, { forward: true });
 	}); */
 
-	ipcMain.on('ToggleTouchMode', (_, data: ToggleTouchModeDataTransfer) => {
+	ipcMain.on(ToggleTouchMode, (_, data: ToggleTouchModeDataTransfer) => {
 		console.log(`{} UI emit event with: `, data);
 		if (data.state) {
 		}

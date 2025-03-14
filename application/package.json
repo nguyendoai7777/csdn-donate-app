@@ -5,19 +5,17 @@
   "description": "My Electron application description",
   "main": ".vite/build/main.js",
   "scripts": {
-    "start": "concurrently \"electron-forge start\" \"npm run be\"",
-    "fe": "electron-forge start",
-    "be": "node --experimental-strip-types src-backend/server.ts",
+    "start": "electron-forge start",
+    "react": "vite dev",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "eslint --ext .ts,.tsx .",
-    "react": "vite dev"
+    "lint": "eslint --ext .ts,.tsx ."
   },
   "keywords": [],
   "author": {
     "name": "doai",
-    "email": "doai.nguyen@sotatek.com"
+    "email": "nguyendoai7777@gmail.com"
   },
   "license": "MIT",
   "devDependencies": {
@@ -47,7 +45,6 @@
   "dependencies": {
     "@fastify/cors": "^11.0.0",
     "@fastify/websocket": "^11.0.2",
-    "concurrently": "^9.1.2",
     "electron-squirrel-startup": "^1.0.1",
     "fastify": "^5.2.1",
     "fastify-cors": "^6.0.3",

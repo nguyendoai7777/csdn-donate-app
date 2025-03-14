@@ -1,19 +1,11 @@
-import { FC, useEffect, useRef, useState } from 'react';
-import { Donation } from './shared/types';
-import { DonateCard } from './DonateCard';
-import { PDonation } from './Donation.types';
-/* export interface Donation {
-	id?: number;
-	name: string;
-	amount: string;
-	message: string;
-	imageUrl: string;
-	timestamp?: Date;
-}
- */
-export const DonationToast: FC<PDonation> = ({ donation }) => {
+import { useEffect, useRef, useState, FC } from 'react';
+import { Donation } from '../shared/types';
+import { PDonation } from '../shared/Donation.types';
+
+export const useRealtimeDonateBusiness = ({ donation }: PDonation) => {
 	const [activeToasts, setActiveToasts] = useState<Donation[]>([]);
 	const [, setExitingToasts] = useState<Donation[]>([]);
+	const timeoutRef = useRef<number>(null);
 	const MAX_TOASTS = 2;
 	const TOAST_DURATION = 5300;
 
@@ -34,10 +26,15 @@ export const DonationToast: FC<PDonation> = ({ donation }) => {
 
 			return [...currentToasts, newDonation];
 		});
-
-		setTimeout(() => {
+		if (timeoutRef.current) {
+			clearTimeout(timeoutRef.current);
+		}
+		timeoutRef.current = window.setTimeout(() => {
 			removeToast(newDonation.id);
 		}, TOAST_DURATION);
+		return () => {
+			clearTimeout(timeoutRef.current);
+		};
 	}, [donation]);
 
 	const removeToast = (id?: number) => {
@@ -66,11 +63,5 @@ export const DonationToast: FC<PDonation> = ({ donation }) => {
 		};
 	}, [activeToasts]);
 
-	return (
-		<>
-			{activeToasts.map((d, idx) => (
-				<DonateCard donate={d} key={d.id} />
-			))}
-		</>
-	);
+	return activeToasts;
 };

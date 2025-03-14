@@ -1,7 +1,5 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { Donation } from './shared/types';
-import { DonateCard } from './DonateCard';
 
 interface PopupWindowPortalProps {
 	children: ReactNode;
@@ -10,7 +8,7 @@ interface PopupWindowPortalProps {
 	height?: number;
 	onClose?: () => void;
 }
-const PopupWindowPortal: FC<PopupWindowPortalProps> = ({ children, title, width = 400, height = 600, onClose }) => {
+export const DonationsHistoryIsolatedWindow: FC<PopupWindowPortalProps> = ({ children, title, width = 400, height = 600, onClose }) => {
 	const [externalWindow, setExternalWindow] = useState<Window | null>(null);
 	const [container, setContainer] = useState<HTMLDivElement | null>(null);
 	const [isOpened, setIsOpened] = useState(false);
@@ -78,9 +76,9 @@ const PopupWindowPortal: FC<PopupWindowPortalProps> = ({ children, title, width 
 		popup.document.title = title;
 		const cssRel = document.createElement('link');
 		cssRel.rel = 'stylesheet';
-		cssRel.href = extractFromAssets(nativeRelCss.href);
 		popup.document.head.appendChild(styleElement);
 		if (nativeRelCss) {
+			cssRel.href = extractFromAssets(nativeRelCss.href);
 			popup.document.head.appendChild(cssRel);
 		}
 		popup.document.body.appendChild(containerDiv);
@@ -103,32 +101,24 @@ const PopupWindowPortal: FC<PopupWindowPortalProps> = ({ children, title, width 
 		};
 	};
 
+	const listenOpenHistoryWindow = (e: KeyboardEvent) => {
+		if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'h') {
+			e.preventDefault();
+			if (!isOpened) {
+				openHistoryWindow();
+			}
+		}
+	};
+
 	useEffect(() => {
 		openHistoryWindow();
 	}, [title, width, height, onClose]);
 	useEffect(() => {
-		document.addEventListener('keydown', (e: KeyboardEvent) => {
-			if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'h') {
-				e.preventDefault();
-				if (!isOpened) {
-					openHistoryWindow();
-				}
-			}
-		});
+		document.addEventListener('keydown', listenOpenHistoryWindow);
+		return () => {
+			document.removeEventListener('kedown', listenOpenHistoryWindow);
+		};
 	}, []);
 	if (!externalWindow || !container) return null;
 	return createPortal(children, container);
-};
-
-export default PopupWindowPortal;
-export const DonationsHistoryList: FC<{ donations: Donation[] }> = ({ donations }) => {
-	return (
-		<div className=''>
-			{donations.map((d) => (
-				<div key={d.id} className='mt-4'>
-					<DonateCard donate={d} fixed={false} />
-				</div>
-			))}
-		</div>
-	);
 };

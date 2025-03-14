@@ -1,7 +1,7 @@
-import { FC, MouseEvent, useContext, useEffect, useRef, useState } from 'react';
-import { ReactBaseProps } from './Donation.types';
+import { FC, MouseEvent, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { AppContext } from './context/app.context';
+import { ReactBaseProps } from '../../shared/Donation.types';
+import { findZIndex } from '../../shared/helper';
 
 export interface DragableOptions extends ReactBaseProps {
 	positionKey: string;
@@ -10,22 +10,6 @@ export interface DragableOptions extends ReactBaseProps {
 	attachToBody?: boolean;
 	enabled?: boolean;
 }
-const findZIndex = (e?: MouseEvent) => {
-	const current = e?.target as HTMLDivElement;
-	const zIndexs = Array.from(document.querySelectorAll('[data-zindex]')).map((c) => +c.getAttribute('data-zindex'));
-	console.log(`{} s: `, { current, zIndexs });
-	const max = Math.max(...zIndexs);
-	if (!e) {
-		return {
-			max,
-		};
-	}
-	const cz = +current.parentElement.getAttribute('data-zindex');
-	return {
-		max,
-		current: cz,
-	};
-};
 export const Dragable: FC<DragableOptions> = ({ children, positionKey, top = 100, left = 0, attachToBody = true, enabled = true }) => {
 	const [dragging, setDragging] = useState(false);
 	const [position, setPosition] = useState(() => {
@@ -51,14 +35,10 @@ export const Dragable: FC<DragableOptions> = ({ children, positionKey, top = 100
 			if (liveDonateRef.current) {
 				const rect = liveDonateRef.current.getBoundingClientRect();
 				setElementSize({ width: rect.width, height: rect.height });
-
-				// Ensure the element stays within bounds when window is resized
 				const windowWidth = window.innerWidth;
 				const windowHeight = window.innerHeight;
-
 				const maxLeft = windowWidth - rect.width;
 				const maxTop = windowHeight - rect.height;
-
 				setPosition((prev: DOMRect) => ({
 					left: Math.max(0, Math.min(prev.left, maxLeft)),
 					top: Math.max(0, Math.min(prev.top, maxTop)),
@@ -79,8 +59,6 @@ export const Dragable: FC<DragableOptions> = ({ children, positionKey, top = 100
 				x: e.clientX - rect.left,
 				y: e.clientY - rect.top,
 			};
-
-			// Update element size in case it changed
 			setElementSize({ width: rect.width, height: rect.height });
 		}
 
@@ -92,18 +70,14 @@ export const Dragable: FC<DragableOptions> = ({ children, positionKey, top = 100
 	const handleMouseMove = (e: MouseEvent) => {
 		const newLeft = e.clientX - dragOffsetRef.current.x;
 		const newTop = e.clientY - dragOffsetRef.current.y;
-
 		const windowWidth = window.innerWidth;
 		const windowHeight = window.innerHeight;
-
 		const maxLeft = windowWidth - elementSize.width;
 		const maxTop = windowHeight - elementSize.height;
-
 		const newPosition = {
 			left: Math.max(0, Math.min(newLeft, maxLeft)),
 			top: Math.max(0, Math.min(newTop, maxTop)),
 		};
-
 		setPosition(newPosition);
 	};
 
@@ -133,36 +107,7 @@ export const Dragable: FC<DragableOptions> = ({ children, positionKey, top = 100
 		};
 	}, [dragging, position, elementSize]);
 
-	useEffect(() => {
-		localStorage.setItem(positionKey, JSON.stringify(position));
-	}, [position]);
-
-	return attachToBody ? (
-		createPortal(
-			<div
-				ref={liveDonateRef}
-				style={{
-					left: `${position.left}px`,
-					top: `${position.top}px`,
-					position: 'fixed',
-					willChange: 'left, top',
-					transform: 'translate3d(0,0,0)',
-					zIndex: dragging ? 9999 : layoutOrder,
-				}}
-				data-zindex={layoutOrder}
-				className={`Dragable ${enabled ? '' : 'disabled'} ${dragging ? 'border-opacity-100' : 'border-opacity-75'} select-none`}
-			>
-				<div
-					className={`dragable-btn ${enabled ? '' : 'disabled'} ${dragging ? 'border-opacity-75' : ''}`}
-					onMouseDown={handleMouseDown}
-					style={{ touchAction: 'none', cursor: dragging ? 'grabbing' : 'grab' }}
-				/>
-
-				<div className=' flex gap-3 flex-col'>{children}</div>
-			</div>,
-			document.querySelector('body')
-		)
-	) : (
+	const ChildComponent = (
 		<div
 			ref={liveDonateRef}
 			style={{
@@ -177,7 +122,7 @@ export const Dragable: FC<DragableOptions> = ({ children, positionKey, top = 100
 			className={`Dragable ${enabled ? '' : 'disabled'} ${dragging ? 'border-opacity-100' : 'border-opacity-75'} select-none`}
 		>
 			<div
-				className={`dragable-btn ${enabled ? '' : 'disabled'}  ${dragging ? 'border-opacity-75' : ''}`}
+				className={`dragable-btn ${enabled ? '' : 'disabled'} ${dragging ? 'border-opacity-75' : ''}`}
 				onMouseDown={handleMouseDown}
 				style={{ touchAction: 'none', cursor: dragging ? 'grabbing' : 'grab' }}
 			/>
@@ -185,4 +130,6 @@ export const Dragable: FC<DragableOptions> = ({ children, positionKey, top = 100
 			<div className=' flex gap-3 flex-col'>{children}</div>
 		</div>
 	);
+
+	return attachToBody ? createPortal(ChildComponent, document.querySelector('body')) : ChildComponent;
 };

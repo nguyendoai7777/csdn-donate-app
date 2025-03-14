@@ -5,5 +5,9 @@ export interface Donation {
 	message: string;
 	imageUrl: string;
 	totalAmount: number;
-	timestamp?: Date;
+	timestamp?: Date | string | number;
+}
+export interface UseElementSizeProps {
+	width: number;
+	height: number;
 }

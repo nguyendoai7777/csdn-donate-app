@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Donation } from './shared/types';
+import { Donation } from './types';
 
 export interface PDonation {
 	donation: Donation;

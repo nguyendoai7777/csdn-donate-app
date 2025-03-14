@@ -17,5 +17,5 @@
 		"noEmit": true,
 		"jsx": "react-jsx"
 	},
-	"include": ["src", "src-backend", "/shared", "**/*.d.ts"]
+	"include": ["src", "src-backend", "/shared", "**/*.d.ts", "app.events.ts"]
 }
