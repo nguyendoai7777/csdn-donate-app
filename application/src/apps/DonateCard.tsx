@@ -2,9 +2,9 @@ import { FC } from 'react';
 import { Donation } from './shared/types';
 export const DonateCard: FC<{ donate: Donation; fixed?: boolean }> = ({ donate: d, fixed = true }) => {
 	return (
-		<div className={` z-50 ${fixed ? 'animate-slide-in w-[350px]' : 'w-full'}`} key={d.id}>
+		<div className={` z-50 ${fixed ? 'animate-slide-in w-[350px]' : ''}`} key={d.id}>
 			<div className='rounded-lg shadow-lg overflow-hidden'>
-				<div className='bg-purple-700 bg-opacity-85 px-4 py-2 flex justify-between items-center'>
+				<div className='bg-purple-700 bg-opacity-85 px-4 py-2 flex justify-between items-center l'>
 					<span className='font-bold text-white'>{d.name}</span>
 					<span className='text-white font-bold'>
 						{d.amount} <sup>₫</sup>

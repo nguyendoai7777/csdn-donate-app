@@ -1,5 +1,5 @@
 import { ToggleTouchModeDataTransfer } from './apps/shared/context-brige.types';
-import { app, BrowserWindow, ipcMain, protocol } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
 import { fileURLToPath } from 'url';
@@ -15,21 +15,19 @@ const createWindow = () => {
 	mainWindow = new BrowserWindow({
 		fullscreen: false,
 		resizable: true,
-		transparent: true, // Nền trong suốt
-		frame: false, // Không hiển thị viền cửa sổ
-		// skipTaskbar: true, // Không hiển thị trên taskbar
-		// alwaysOnTop: true, // Luôn hiển thị trên cùng
-		focusable: true, // Không nhận focus từ hệ thống
-		// show: false, // Không hiển thị ngay khi khởi tạo
+		transparent: true,
+		frame: false,
+		// skipTaskbar: true,
+		// alwaysOnTop: true,
+		focusable: true,
+		// show: false,
 		webPreferences: {
-			/* nodeIntegration: false,
-			contextIsolation: true, */
+			nodeIntegration: true,
+			contextIsolation: true,
 			preload: path.join(__dirname, 'preload.js'),
 		},
 	});
 
-	//mainWindow.setPosition(20, height - 170);
-	// and load the index.html of the app.
 	if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
 		mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
 	} else {
@@ -38,7 +36,7 @@ const createWindow = () => {
 	mainWindow.once('ready-to-show', () => {
 		mainWindow.maximize();
 		mainWindow.show();
-		mainWindow.webContents.openDevTools();
+		// mainWindow.webContents.openDevTools();
 	});
 	/* // Cho phép người dùng click xuyên qua phần trong suốt
 	mainWindow.setIgnoreMouseEvents(true, { forward: true });

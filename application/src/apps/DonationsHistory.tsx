@@ -2,7 +2,6 @@ import { FC, ReactNode, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Donation } from './shared/types';
 import { DonateCard } from './DonateCard';
-// PopupWindowPortal.tsx
 
 interface PopupWindowPortalProps {
 	children: ReactNode;
@@ -11,13 +10,13 @@ interface PopupWindowPortalProps {
 	height?: number;
 	onClose?: () => void;
 }
-
 const PopupWindowPortal: FC<PopupWindowPortalProps> = ({ children, title, width = 400, height = 600, onClose }) => {
 	const [externalWindow, setExternalWindow] = useState<Window | null>(null);
 	const [container, setContainer] = useState<HTMLDivElement | null>(null);
+	const [isOpened, setIsOpened] = useState(false);
 
-	useEffect(() => {
-		// Mở cửa sổ popup
+	const openHistoryWindow = () => {
+		const nativeRelCss = document.head.querySelector('link');
 		const popup = window.open('', title, `width=${width},height=${height}`);
 		const nativeStyles = Array.from(document.querySelectorAll('head style'))
 			.map((c) => c.textContent)
@@ -27,30 +26,26 @@ const PopupWindowPortal: FC<PopupWindowPortalProps> = ({ children, title, width 
 			return;
 		}
 
-		// Tạo container div trong cửa sổ mới
 		const containerDiv = document.createElement('div');
 		containerDiv.id = 'popup-root';
-		// Thêm một số CSS cơ bản cho cửa sổ popup
 		const styleElement = document.createElement('style');
 		styleElement.textContent = /* css */ `
       body {
         background-color: black;
+        padding-right: 2px;
       }
       * {
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        padding-right: 2px;
       }
       #popup-root {
         width: 100%;
         height: 100svh;
         background-color: black;
         overflow: hidden scroll;
-        padding-block: 16px;
-        padding-left: 24px;
-        padding-right: 4px;
+        padding: 0 4px 16px 16px;
       }
   
       ::-webkit-scrollbar-track {
@@ -64,55 +59,75 @@ const PopupWindowPortal: FC<PopupWindowPortalProps> = ({ children, title, width 
 
       ::-webkit-scrollbar-thumb {
         border-radius: 10px;
-        background-color: gray;
+        background-color: #777;
         border: 2px solid transparent;
+        transition: .15s;
+      }
+      &:hover {
+        ::-webkit-scrollbar-thumb {
+          background-color: gray;
+        }
       }
       ${nativeStyles}
-  
+    
     `;
-
-		// Thiết lập tiêu đề cho cửa sổ
+		const extractFromAssets = (url: string) => {
+			const match = url.match(/assets\/.*/);
+			return match ? match[0] : null;
+		};
 		popup.document.title = title;
-		const linkRelCss = document.createElement('link');
-		const nativeRelCss = document.head.querySelector('link');
-		linkRelCss.href = './assets/index-_Celctyl.css';
-		// Thêm style và container vào cửa sổ mới
+		const cssRel = document.createElement('link');
+		cssRel.rel = 'stylesheet';
+		cssRel.href = extractFromAssets(nativeRelCss.href);
 		popup.document.head.appendChild(styleElement);
-		nativeRelCss && popup.document.head.appendChild(linkRelCss);
+		if (nativeRelCss) {
+			popup.document.head.appendChild(cssRel);
+		}
 		popup.document.body.appendChild(containerDiv);
 
-		// Lưu tham chiếu tới cửa sổ và container
 		setExternalWindow(popup);
 		setContainer(containerDiv);
-
+		setIsOpened(true);
 		const handleClose = () => {
 			if (onClose) onClose();
 		};
 
 		popup.addEventListener('beforeunload', handleClose);
 
-		// Cleanup khi component unmount
 		return () => {
 			popup.removeEventListener('beforeunload', handleClose);
 			if (!popup.closed) {
 				popup.close();
+				setIsOpened(false);
 			}
 		};
+	};
+
+	useEffect(() => {
+		openHistoryWindow();
 	}, [title, width, height, onClose]);
-
-	// Chỉ render khi cả cửa sổ và container đều tồn tại
+	useEffect(() => {
+		document.addEventListener('keydown', (e: KeyboardEvent) => {
+			if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'h') {
+				e.preventDefault();
+				if (!isOpened) {
+					openHistoryWindow();
+				}
+			}
+		});
+	}, []);
 	if (!externalWindow || !container) return null;
-
-	// Sử dụng ReactDOM.createPortal để render children vào container trong cửa sổ mới
 	return createPortal(children, container);
 };
 
 export default PopupWindowPortal;
 export const DonationsHistoryList: FC<{ donations: Donation[] }> = ({ donations }) => {
 	return (
-		<div className='flex flex-col gap-3 items-center'>
+		<div className=''>
 			{donations.map((d) => (
-				<DonateCard donate={d} key={d.id} fixed={false} />
+				<div key={d.id} className='mt-4'>
+					<DonateCard donate={d} fixed={false} />
+				</div>
 			))}
 		</div>
 	);
